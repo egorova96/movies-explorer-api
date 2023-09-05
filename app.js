@@ -18,6 +18,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 app.use(errors());
 app.use(helmet());
+
 app.use(express.json());
 app.use(requestLogger);
 app.use(limiter);
