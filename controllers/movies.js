@@ -1,7 +1,10 @@
-const Movie = require('../models/movies');
+const Movie = require('../models/movieSchema');
 const {
   OK,
   STATUS_CODE,
+  INCORRECT_DATA_ERROR,
+  NOTFOUND_MOVIE,
+  ACCESS_DENIED,
 } = require('../utils/constants');
 
 const ValidationError = require('../errors/ValidationError');
@@ -9,9 +12,8 @@ const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
 
 module.exports.getMovies = (req, res, next) => {
-  Movie.find({}).then((movies) =>
-  res.send(movies))
-  .catch(next);
+  Movie.find({}).then((movies) => res.send(movies))
+    .catch(next);
 };
 
 module.exports.createMovie = (req, res, next) => {
@@ -25,15 +27,23 @@ module.exports.createMovie = (req, res, next) => {
 
   Movie
     .create({
-      country, director, duration,
-      year, description, image,
-      trailerLink, thumbnail, movieId,
-      nameRU, nameEN, owner: _id,
+      country,
+      director,
+      duration,
+      year,
+      description,
+      image,
+      trailerLink,
+      thumbnail,
+      movieId,
+      nameRU,
+      nameEN,
+      owner: _id,
     })
     .then((movie) => res.status(OK).send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new ValidationError('Введены некорректные данные'));
+        next(new ValidationError(INCORRECT_DATA_ERROR));
       } else {
         next(err);
       }
@@ -44,25 +54,25 @@ module.exports.deleteMovie = (req, res, next) => {
   const { _id } = req.params;
 
   Movie.findById(_id).then((movie) => {
-      if (!movie) {
-        throw new NotFoundError('Фильм не найден');
-      }
-      if (movie.owner.toString() !== req.user._id) {
-        throw new ForbiddenError('Недостаточно прав');
-      }
-      Movie
-        .findByIdAndRemove(_id)
-        .then((movie) => {
-          if (!movie) {
-            throw new NotFoundError('Фильм не найден');
-          }
-          res.status(STATUS_CODE).send(movie);
-        })
-        .catch(next);
-    })
+    if (!movie) {
+      throw new NotFoundError(NOTFOUND_MOVIE);
+    }
+    if (movie.owner.toString() !== req.user._id) {
+      throw new ForbiddenError(ACCESS_DENIED);
+    }
+    Movie
+      .findByIdAndRemove(_id)
+      .then((item) => {
+        if (!item) {
+          throw new NotFoundError(NOTFOUND_MOVIE);
+        }
+        res.status(STATUS_CODE).send(item);
+      })
+      .catch(next);
+  })
     .catch((err) => {
       if (err.name === 'CastError') {
-        return next(new ValidationError('Введены некорректные данные'));
+        return next(new ValidationError(INCORRECT_DATA_ERROR));
       }
       return next(err);
     });

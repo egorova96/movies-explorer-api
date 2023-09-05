@@ -1,5 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const mongoose = require('mongoose');
-
+const isUrl = require('validator/lib/isURL');
+const { INCORRECT_URL } = require('../utils/constants');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -26,7 +28,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (url) => isUrl(url),
-      message: 'Некорректная ссылка',
+      message: INCORRECT_URL,
     },
     type: String,
   },
@@ -34,7 +36,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (url) => isUrl(url),
-      message: 'Некорректная ссылка',
+      message: INCORRECT_URL,
     },
     type: String,
   },
@@ -42,7 +44,7 @@ const movieSchema = new mongoose.Schema({
     required: true,
     validate: {
       validator: (url) => isUrl(url),
-      message: 'Некорректная ссылка',
+      message: INCORRECT_URL,
     },
     type: String,
   },

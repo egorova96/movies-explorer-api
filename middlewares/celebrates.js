@@ -1,5 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
-const { regex_url } = require('../utils/constants');
+const { REGEX_URL } = require('../utils/constants');
 
 module.exports.createUser = celebrate({
   body: Joi.object().keys({
@@ -30,9 +30,9 @@ module.exports.createMovie = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().pattern(regex_url).required(),
-    trailerLink: Joi.string().required().pattern(regex_url),
-    thumbnail: Joi.string().required().pattern(regex_url),
+    image: Joi.string().pattern(REGEX_URL).required(),
+    trailerLink: Joi.string().required().pattern(REGEX_URL),
+    thumbnail: Joi.string().required().pattern(REGEX_URL),
     movieId: Joi.number().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
@@ -42,6 +42,6 @@ module.exports.createMovie = celebrate({
 module.exports.deleteMovie = celebrate({
   params: Joi.object().keys({
     _id: Joi
-      .string().required().hex(),
+      .string().required().hex().max(24),
   }),
 });

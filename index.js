@@ -14,6 +14,7 @@ router.use(auth);
 router.use(usersRouter);
 router.use(movieRouter);
 
+// eslint-disable-next-line arrow-body-style
 router.use('*', (req, res, next) => {
   return next(new NotFoundError('Ресурс не найден'));
 });

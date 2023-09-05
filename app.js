@@ -1,22 +1,27 @@
+/* eslint-disable import/no-extraneous-dependencies */
+require('dotenv').config();
 const express = require('express');
+const helmet = require('helmet');
+
 const app = express();
 const mongoose = require('mongoose');
 
-const { PORT = 3000, dataBase_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
-mongoose.connect(dataBase_URL);
+const { PORT = 3000, DATABASE_URL = 'mongodb://127.0.0.1:27017/bitfilmsdb' } = process.env;
+mongoose.connect(DATABASE_URL);
 
 const { errors } = require('celebrate');
-const limiter = require('./middlewares/limiter');
 const routes = require('routes');
+const cors = require('cors');
+const limiter = require('./middlewares/limiter');
 const errorHandler = require('./middlewares/errorHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const cors = require('cors');
 
 app.use(errors());
+app.use(helmet());
 app.use(express.json());
 app.use(requestLogger);
-app.use(routes);
 app.use(limiter);
+app.use(routes);
 app.use(cors());
 app.use(errorLogger);
 app.use(errorHandler);

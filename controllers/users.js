@@ -1,7 +1,9 @@
+/* eslint-disable no-shadow */
+/* eslint-disable import/no-unresolved */
 const { NODE_ENV, JWT_SECRET } = process.env;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const User = require('../models/user');
+const User = require('../models/userSchema');
 
 const ValidationError = require('../errors/ValidationError');
 const ConflictError = require('../errors/ConflictError');
@@ -9,6 +11,9 @@ const NotFoundError = require('../errors/NotFoundError');
 
 const {
   OK,
+  INCORRECT_DATA_ERROR,
+  USER_EMAIL_EXIST,
+  NOTFOUND_USER,
 } = require('../utils/constants');
 
 module.exports.login = (req, res, next) => {
@@ -27,14 +32,13 @@ module.exports.login = (req, res, next) => {
 module.exports.getUserById = (req, res, next) => {
   const { _id } = req.user;
   User.findById(_id).then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь не найден');
-      }
-      res.send(user);
-    })
+    if (!user) {
+      throw new NotFoundError(NOTFOUND_USER);
+    }
+    res.send(user);
+  })
     .catch(next);
 };
-
 
 module.exports.updateUser = (req, res, next) => {
   const { name, email } = req.body;
@@ -43,44 +47,46 @@ module.exports.updateUser = (req, res, next) => {
     .findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new NotFoundError(NOTFOUND_USER);
       }
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        return next(new ValidationError('Введены некорректные данные'));
+        return next(new ValidationError(INCORRECT_DATA_ERROR));
       }
       return next(err);
     });
 
-    module.exports.createUser = (req, res, next) => {
-      const {
-        name, email, password,
-      } = req.body;
-      bcrypt.hash(password, 10)
-        .then((hash) => User.create(
-          {
-            name, email, password: hash,
-          },
-        )).then((user) => {
-          res
-            .status(OK)
-            .send({
-              data: {
-                name: user.name,
-                email: user.email,
-                _id: user._id,
-              },
-            });
-        }).catch((err) => {
-          if (err.name === 'ValidationError') {
-            return next(new ValidationError('Введены некорректные данные'));
-          }
-          if (err.code === 11000) {
-            return next(new ConflictError('Указанный email уже существует'));
-          }
-          return next(err);
-        });
-    };
+  module.exports.createUser = (req, res, next) => {
+    const {
+      name,
+      email,
+      password,
+    } = req.body;
+    bcrypt.hash(password, 10)
+      .then((hash) => User.create(
+        {
+          name, email, password: hash,
+        },
+      )).then((user) => {
+        res
+          .status(OK)
+          .send({
+            data: {
+              name: user.name,
+              email: user.email,
+              _id: user._id,
+            },
+          });
+      }).catch((err) => {
+        if (err.name === 'ValidationError') {
+          return next(new ValidationError(INCORRECT_DATA_ERROR));
+        }
+        if (err.code === 11000) {
+          return next(new ConflictError(USER_EMAIL_EXIST));
+        }
+        return next(err);
+      });
+  };
 };
