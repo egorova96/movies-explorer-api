@@ -11,8 +11,9 @@ const ValidationError = require('../errors/ValidationError');
 const NotFoundError = require('../errors/NotFoundError');
 const ForbiddenError = require('../errors/ForbiddenError');
 
-module.exports.getMovies = (req, res, next) => {
-  Movie.find({}).then((movies) => res.send(movies))
+module.exports.getMyMovies = (req, res, next) => {
+  const { _id } = req.user;
+  Movie.find({ owner: _id }).then((movies) => res.send(movies))
     .catch(next);
 };
 
@@ -24,7 +25,6 @@ module.exports.createMovie = (req, res, next) => {
     nameRU, nameEN,
   } = req.body;
   const { _id } = req.user;
-
   Movie
     .create({
       country,

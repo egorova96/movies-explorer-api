@@ -5,6 +5,7 @@ const movieRouter = require('./routes/movies');
 const { auth } = require('./middlewares/auth');
 const { login, createUser } = require('./controllers/users');
 const NotFoundError = require('./errors/NotFoundError');
+const { RESOURCE_ERROR } = require('./utils/constants');
 
 router.post('/signup', celebrate.createUser, createUser);
 
@@ -16,7 +17,7 @@ router.use(movieRouter);
 
 // eslint-disable-next-line arrow-body-style
 router.use('*', (req, res, next) => {
-  return next(new NotFoundError('Ресурс не найден'));
+  return next(new NotFoundError(RESOURCE_ERROR));
 });
 
 module.exports = router;
