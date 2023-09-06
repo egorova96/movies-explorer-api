@@ -15,7 +15,7 @@ const ACCESS_DENIED = 'Недостаточно прав доступа';
 const INCORRECT_URL = 'Некорректная ссылка';
 const INCORRECT_EMAIL = 'Некорректный email';
 const RESOURCE_ERROR = 'Запрашиваемый ресурс не найден';
-const INCORRECT_ERROR = 'Неправильная почта или пароль';
+const INCORRECT_CREDENTIALS = 'Неправильная почта или пароль';
 const ERRORHANDLER_MESSAGE = 'Ошибка сервера';
 const AUTHORIZATION = 'Необходимо войти на сайт';
 const NOTFOUND_USER = 'Пользователь не найден';
@@ -32,7 +32,7 @@ module.exports = {
   CONFLICT_ERROR,
   SERVER_ERROR,
   RESOURCE_ERROR,
-  INCORRECT_ERROR,
+  INCORRECT_CREDENTIALS,
   ERRORHANDLER_MESSAGE,
   AUTHORIZATION,
   NOTFOUND_USER,
