@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
-/* eslint-disable import/no-unresolved */
 const { NODE_ENV, JWT_SECRET } = process.env;
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userSchema');
 
