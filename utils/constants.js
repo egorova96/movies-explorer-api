@@ -9,6 +9,9 @@ const SERVER_ERROR = 500;
 
 const REGEX_URL = /https*:\/\/[\w\S]{1,}\.[\w\S]{1,}/;
 
+const AUTHORIZATION = 'Необходимо войти на сайт';
+const NOTFOUND_USER = 'Пользователь не найден';
+const INCORRECT_DATA_ERROR = 'Введенные данные некорректны';
 const USER_EMAIL_EXIST = 'Указанный email уже существует';
 const NOTFOUND_MOVIE = 'Фильм не найден';
 const ACCESS_DENIED = 'Недостаточно прав доступа';
@@ -17,9 +20,6 @@ const INCORRECT_EMAIL = 'Некорректный email';
 const RESOURCE_ERROR = 'Запрашиваемый ресурс не найден';
 const INCORRECT_CREDENTIALS = 'Неправильная почта или пароль';
 const ERRORHANDLER_MESSAGE = 'Ошибка сервера';
-const AUTHORIZATION = 'Необходимо войти на сайт';
-const NOTFOUND_USER = 'Пользователь не найден';
-const INCORRECT_DATA_ERROR = 'Введенные данные некорректны';
 
 module.exports = {
   OK,

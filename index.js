@@ -1,10 +1,13 @@
 const router = require('express').Router();
 const celebrate = require('./middlewares/celebrates');
+
 const usersRouter = require('./routes/users');
 const movieRouter = require('./routes/movies');
+
 const { auth } = require('./middlewares/auth');
 const { login, createUser } = require('./controllers/users');
 const NotFoundError = require('./errors/NotFoundError');
+
 const { RESOURCE_ERROR } = require('./utils/constants');
 
 router.post('/signup', celebrate.createUser, createUser);
