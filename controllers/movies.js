@@ -3,8 +3,8 @@ const {
   OK,
   STATUS_CODE,
   INCORRECT_DATA_ERROR,
-  NOTFOUND_MOVIE,
   ACCESS_DENIED,
+  NOTFOUND_MOVIE,
 } = require('../utils/constants');
 
 const ValidationError = require('../errors/ValidationError');

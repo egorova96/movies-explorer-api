@@ -20,10 +20,15 @@ app.use(errors());
 app.use(helmet());
 
 app.use(express.json());
+
 app.use(requestLogger);
+
 app.use(limiter);
+
 app.use(routes);
+
 app.use(cors());
+
 app.use(errorLogger);
 app.use(errorHandler);
 

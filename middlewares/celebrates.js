@@ -8,21 +8,18 @@ module.exports.createUser = celebrate({
     password: Joi.string().required().min(8),
   }),
 });
-
 module.exports.login = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
   }),
 });
-
 module.exports.updateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     email: Joi.string().email(),
   }),
 });
-
 module.exports.createMovie = celebrate({
   body: Joi.object().keys({
     country: Joi.string().required(),
@@ -38,7 +35,6 @@ module.exports.createMovie = celebrate({
     nameEN: Joi.string().required(),
   }),
 });
-
 module.exports.deleteMovie = celebrate({
   params: Joi.object().keys({
     _id: Joi
